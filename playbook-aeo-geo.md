@@ -103,7 +103,16 @@ Regras que valem para todas as fases (aprendidas no cliente-zero, não negociáv
 
 **Pergunta que responde:** "quem chega ao site sai guiado, qualificado e — havendo interesse — vira lead?"
 
-**Arquitetura de referência:** widget vanilla JS em **shadow DOM** (zero conflito com o site do cliente, zero dependências) → Edge Function serverless (a chave do modelo **nunca** toca o navegador) → LLM barato/rápido (Claude Haiku; via OpenRouter se quiser formato OpenAI normalizado) → Postgres (`conversations`, `messages`, `leads`, `catalogo_fichas`, `injection_flags`).
+**Arquitetura de referência:** widget vanilla JS em **shadow DOM** (zero conflito com o site do cliente, zero dependências) → Edge Function serverless (a chave do modelo **nunca** toca o navegador) → LLM barato/rápido via OpenRouter (Claude Haiku no cliente-zero) → Postgres (`conversations`, `messages`, `leads`, `catalogo_fichas`, `injection_flags`).
+
+**O cérebro: OpenRouter como padrão.** A Edge Function não chama a API do provedor do modelo diretamente — chama o OpenRouter, que expõe centenas de modelos atrás de **um único endpoint no formato OpenAI**. Por quê:
+
+1. **Um formato só.** As APIs dos provedores divergem em detalhes traiçoeiros (autenticação, onde vai o system prompt, `max_tokens` obrigatório ou não, formato de tool use, eventos de streaming). O plano do cliente-zero tinha uma tabela inteira de diferenças OpenAI×Anthropic para não portar código às cegas — com o OpenRouter essa tabela deixa de ser problema.
+2. **Trocar de modelo = trocar uma string.** Se o modelo ficar caro, lento ou for descontinuado, muda-se o nome na config — sem reescrever a integração. Útil nas iterações do gate de qualidade.
+3. **Dashboard de custo por requisição/modelo** — é onde se mede o gate "custo médio por conversa ≤ teto acordado", sem instrumentação própria.
+4. **Uma chave só, no servidor** (secret da Edge Function; o navegador nunca a vê).
+
+Trade-off honesto: é um intermediário (pequena latência e margem sobre o preço do modelo) e recursos nativos exclusivos de um provedor podem não estar disponíveis. Para chat de site com modelo barato, a simplicidade vence.
 
 **Decisões de desenho que transferem para qualquer cliente:**
 - **Navegação e captura = tool use com schema fechado, nunca texto livre.** `navigate_to(rota)` com `rota` sendo enum das rotas reais do site — o modelo não consegue inventar URL porque o schema não deixa. `capture_lead(nome, email, interesse)` idem.
