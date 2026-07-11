@@ -108,6 +108,15 @@ cd <repo-do-portal>
 node scripts/suite-adversarial.mjs        # gate: 0 vazamentos, 0 ações fora do schema
 ```
 
+**Como trocar o modelo (cérebro) do agente:**
+O agente lê o modelo do secret `CHAT_MODEL_ID` da Edge Function (via OpenRouter; fallback hardcoded para um LLM barato com tool use). Trocar é trocar uma string — mas nunca sem os gates. O script `scripts/trocar-modelo.mjs` (no repo do portal) faz a troca com validação:
+```bash
+cd <repo-do-portal>
+node scripts/trocar-modelo.mjs <modelo-openrouter>   # ex.: cortar custo
+node scripts/trocar-modelo.mjs <modelo-anterior>     # rollback
+```
+Ele: (1) valida na OpenRouter que o modelo existe **e suporta tool use** (aborta se não — o agente depende de `navigate_to`/`capture_lead`); (2) seta o secret; (3) smoke-testa contra a função publicada com retry; (4) re-roda a suíte adversarial. A decisão final continua humana — revisar as transcrições em `suite-adversarial-resultado.json` antes de aprovar. Flag `--sem-suite` pula o passo 4 (deixa a troca **não validada**).
+
 **Pendências F3 (ação do Nei):**
 1. ~~Env vars `NEXT_PUBLIC_SUPABASE_CHAT_URL` e `NEXT_PUBLIC_SUPABASE_CHAT_ANON_KEY` no Vercel~~ — **feito** (commit `f90aca0`).
 2. Aprovar 10 transcrições de conversa antes do go-live oficial (critério de saída do plano).

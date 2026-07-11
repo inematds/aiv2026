@@ -150,6 +150,17 @@ node scripts/sync-catalogo-supabase.mjs   # catalogo/ → tabela catalogo_fichas
 
 Sem esse sync, o site diz uma coisa e o agente diz outra. Se a mudança foi no **prompt** do agente (não no catálogo), o caminho é outro: golden set re-executado + aprovação do cliente antes do deploy.
 
+### 2b. Trocar o modelo (cérebro) do agente
+
+Uma das razões do OpenRouter como padrão (ver F3): **trocar de modelo é trocar uma string** — o secret `CHAT_MODEL_ID` da Edge Function. Mas nunca sem os gates de segurança. Um script de troca deve:
+
+1. **Validar na OpenRouter** que o modelo existe **e suporta tool use** — o agente depende de tools de schema fechado (`navigate_to`, `capture_lead`); um modelo sem tools quebra tudo. Abortar se não.
+2. **Setar o secret** (`CHAT_MODEL_ID`) e registrar qual era o modelo anterior (para rollback).
+3. **Smoke-testar** contra a função publicada, com retry (o secret novo leva alguns segundos até o runtime reiniciar).
+4. **Re-rodar a suíte adversarial** contra o modelo novo — o mesmo gate do go-live (≥20 ataques, 0 vazamentos, 0 ações fora do schema). A decisão final continua humana: revisar as transcrições antes de aprovar.
+
+No cliente-zero isso é `scripts/trocar-modelo.mjs` (ver `case-inema/o-que-foi-feito-aiv.md`): `node scripts/trocar-modelo.mjs <modelo>` faz os 4 passos; rollback é a mesma chamada com o modelo antigo. **Escolha do modelo**: um LLM barato e rápido com tool use disciplinado (o cliente-zero usa Claude Haiku); o dashboard da OpenRouter dá o custo real por conversa para comparar candidatos A/B antes de trocar.
+
 ### 3. Indexação: como o `/conhecimento` é atualizado no Google e no Bing
 
 **Setup inicial (uma vez):**
