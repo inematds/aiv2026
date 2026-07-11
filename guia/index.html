@@ -179,16 +179,24 @@
 <span class="k">git clone</span> <span class="s">https://github.com/inematds/aiv2026</span>
 <span class="k">cat</span> aiv2026/playbook-aeo-geo.md</pre></div>
     <div class="card"><h3>🏢 Do cliente</h3><p>Acesso ao domínio/site (para o proxy e o robots.txt), 1–2 h/semana de revisão durante o catálogo, e um decisor disponível para aprovar as transcrições do agente.</p></div>
-    <div class="card"><h3>🧱 De infraestrutura</h3><p>Hospedagem estática (GitHub Pages resolve), um Postgres serverless (Supabase) para o agente, e uma chave de LLM que nunca toca o navegador.</p></div>
+    <div class="card"><h3>🧱 De infraestrutura</h3><p>Hospedagem estática (GitHub Pages resolve), um Postgres serverless (Supabase) para o agente, e uma chave de LLM — via OpenRouter por padrão — que nunca toca o navegador.</p></div>
   </div>
 </div></section>
 
 <section id="guia"><div class="wrap">
   <span class="chip">Guia de uso · passo a passo</span>
   <h2>Do zero ao cliente citado por IA</h2>
-  <p class="sub">O resumo executável do playbook. Cada passo corresponde a uma fase — os detalhes, modos de falha e critérios completos estão nos documentos do repo.</p>
+  <p class="sub">O resumo executável do playbook — do zero à operação contínua. Os detalhes, modos de falha e critérios completos estão nos documentos do repo (o README traz este mesmo passo a passo expandido).</p>
 
   <div class="step"><div class="b">1</div><div>
+    <h3>Comece do zero: gere o seu plano war-game</h3>
+    <p>Clone o repo, leia o playbook de ponta a ponta e use o prompt original com os [placeholders] trocados pelo projeto do cliente novo. Planeje as barreiras antes de escrever uma linha de código.</p>
+<pre><span class="k">git clone</span> <span class="s">https://github.com/inematds/aiv2026</span>
+<span class="k">cat</span> aiv2026/playbook-aeo-geo.md              <span class="c"># o método</span>
+<span class="k">cat</span> aiv2026/case-inema/prompt-war-game-portugues.md  <span class="c"># gere seu plano com ele</span></pre>
+  </div></div>
+
+  <div class="step"><div class="b">2</div><div>
     <h3>Meça o baseline (F0)</h3>
     <p>Levante ~20 perguntas neutras do nicho com o cliente, congele a bateria como v1 e rode cada prompt 3× em cada IA. Sem baseline, nenhum resultado depois é demonstrável.</p>
 <pre><span class="c"># registrar em CSV: data, ferramenta, prompt, execução,</span>
@@ -196,7 +204,7 @@
 <span class="k">resultado do cliente-zero:</span> 0% de aparição em 52 medições</pre>
   </div></div>
 
-  <div class="step"><div class="b">2</div><div>
+  <div class="step"><div class="b">3</div><div>
     <h3>Escreva o catálogo (F1)</h3>
     <p>Fichas Markdown+YAML em lotes de 10, sempre com fonte real. A FAQ nasce da própria bateria F0 — perguntas com demanda comprovada, não inventadas.</p>
 <pre><span class="c"># front matter obrigatório por ficha</span>
@@ -205,18 +213,19 @@ slug, tipo, titulo, resumo, status, <span class="k">fonte</span>, <span class="k
 <span class="c"># o validador rejeita publicar ficha PENDENTE</span></pre>
   </div></div>
 
-  <div class="step"><div class="b">3</div><div>
+  <div class="step"><div class="b">4</div><div>
     <h3>Publique para as IAs (F2)</h3>
     <p>Gere páginas estáticas com resposta direta no 1º parágrafo, JSON-LD e canonical no domínio do cliente. Libere os bots de IA no robots.txt e prove com curl.</p>
 <pre><span class="c"># o gate não é opinião, é comando:</span>
 <span class="k">curl</span> -A <span class="s">"OAI-SearchBot"</span> https://dominio-do-cliente/conhecimento/  <span class="c"># 200</span>
 <span class="k">curl</span> -A <span class="s">"ClaudeBot"</span>     https://dominio-do-cliente/conhecimento/  <span class="c"># 200</span>
-<span class="c"># + JSON-LD validado + sitemap enviado ao Search Console</span></pre>
+<span class="c"># + JSON-LD validado + sitemap enviado ao Google Search Console</span>
+<span class="c">#   e ao Bing Webmaster Tools (setup único; depois eles re-rastreiam)</span></pre>
   </div></div>
 
-  <div class="step"><div class="b">4</div><div>
+  <div class="step"><div class="b">5</div><div>
     <h3>Instale o agente (F3)</h3>
-    <p>Widget leve no site, função serverless no meio, catálogo como única fonte de verdade. Navegação e captura de lead são tools com schema fechado — o modelo não consegue inventar URL.</p>
+    <p>Widget leve no site, função serverless no meio, catálogo como única fonte de verdade. Navegação e captura de lead são tools com schema fechado — o modelo não consegue inventar URL. O cérebro chama o <strong>OpenRouter</strong> por padrão: um endpoint formato-OpenAI para centenas de modelos, trocar de modelo é trocar uma string, e o custo por conversa sai pronto no dashboard.</p>
 <pre><span class="c"># gates antes do go-live (nenhum é opcional)</span>
 suíte adversarial ≥20 ataques  <span class="c"># 0 vazamentos, 0 ações fora do schema</span>
 flood de requisições           <span class="c"># rate limit devolve 429</span>
@@ -224,13 +233,24 @@ lead de teste                  <span class="c"># confirmado com query no banco</
 10 transcrições                <span class="c"># aprovadas pelo cliente</span></pre>
   </div></div>
 
-  <div class="step"><div class="b">5</div><div>
+  <div class="step"><div class="b">6</div><div>
     <h3>Ligue o loop e prove o delta (F4)</h3>
     <p>Instale os 4 sinais de medição (site, páginas de conhecimento, agente, share of voice) e re-rode a bateria v1 todo mês. O delta contra o baseline é o número do case.</p>
 <pre><span class="c"># share of voice estagnado após 3 meses?</span>
 <span class="c"># a alavanca deixa de ser conteúdo e passa a ser autoridade</span>
 <span class="c"># externa: as fontes que as IAs citam no lugar do cliente</span>
 <span class="k">re-medição mensal</span> → delta vs baseline → relatório de 10 linhas</pre>
+  </div></div>
+
+  <div class="step"><div class="b">7</div><div>
+    <h3>Mantenha as três superfícies em dia (operação contínua)</h3>
+    <p>Toda mudança de conteúdo percorre três destinos: o site público, o banco do agente e os buscadores. Esquecer qualquer um deixa uma superfície desatualizada — o agente responde do banco, não dos arquivos.</p>
+<pre><span class="c"># edite a ficha em catalogo/ (sem confirmação → PENDENTE), depois:</span>
+<span class="k">node</span> scripts/gerar-site.mjs               <span class="c"># 1. site: HTML+JSON-LD+sitemap → push</span>
+<span class="k">node</span> scripts/sync-catalogo-supabase.mjs   <span class="c"># 2. banco do agente (catalogo_fichas)</span>
+<span class="c"># 3. buscadores: o sitemap sai com lastmod novo e Google/Bing</span>
+<span class="c">#    re-rastreiam sozinhos; página estratégica mudou → pedir</span>
+<span class="c">#    reindexação manual no Search Console (Inspeção de URL)</span></pre>
   </div></div>
 </div></section>
 
