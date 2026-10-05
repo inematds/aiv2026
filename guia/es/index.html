@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>AIV 2026 — AI Visibility como servicio (AEO/GEO)</title>
+<meta content="Playbook de 5 fases para hacer que las empresas sean fáciles de encontrar, citar y recomendar por las IA públicas (ChatGPT, Claude, Gemini, Perplexity), con el caso completo del cliente cero." name="description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;800&amp;family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --bg:#0c0c10; --bg2:#14141b; --card:#16161e; --line:#272730;
+    --txt:#e9e9ee; --mut:#9a9aa6; --amb:#E2A23B; --amb2:#f0c070; --sky:#38bdf8; --pro:#cbd5e1;
+    color-scheme:dark;
+  }
+  body.light{
+    --bg:#f6f7f9; --bg2:#eceef2; --card:#ffffff; --line:#e1e3ea;
+    --txt:#1a1a22; --mut:#5b5b68; --amb:#b9791d; --amb2:#a16207; --sky:#0369a1; --pro:#b45309;
+    color-scheme:light;
+  }
+  body.light .hero .glow{opacity:.5}
+  body.light pre{background:#0e0e14;color:#d6d6e0}
+  body.light pre .c{color:#8a8a98}
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.65 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:Sora,sans-serif;line-height:1.15;margin:0}
+  a{color:var(--amb);text-decoration:none}
+  code,pre{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 22px}
+  .mut{color:var(--mut)} .amb{color:var(--amb)}
+  .chip{display:inline-block;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--amb);font-weight:600;font-family:Sora}
+  nav{position:sticky;top:0;z-index:30;backdrop-filter:blur(12px);background:rgba(12,12,16,.78);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:22px;height:60px}
+  nav .brand{display:flex;align-items:center;gap:8px;font-family:Sora;font-weight:800;letter-spacing:-.02em;color:var(--amb)}
+  nav .brand .emoji{font-size:1.25rem}
+  nav .sep{color:var(--mut);opacity:.45}
+  nav .inema{color:var(--sky);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .inema:hover{filter:brightness(1.15)}
+  nav .pro{color:var(--pro);font-weight:600;font-size:.88rem;font-family:Sora}
+  nav .pro:hover{filter:brightness(1.15)}
+  nav .clubpro{display:inline-flex;align-items:center;gap:6px}
+  nav .links{margin-left:auto;display:flex;align-items:center;gap:20px;font-size:.92rem}
+  nav .links a.sec{color:var(--mut)} nav .links a.sec:hover{color:var(--txt)}
+  .tgl{background:var(--bg2);border:1px solid var(--line);color:var(--txt);width:38px;height:38px;border-radius:10px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;font-size:1.05rem}
+  .tgl:hover{border-color:var(--amb)}
+  .btn{display:inline-block;background:var(--amb);color:#1a1206;font-weight:600;padding:.6em 1.05em;border-radius:10px;font-family:Sora}
+  .btn.ghost{background:transparent;color:var(--txt);border:1px solid var(--line)}
+  @media(max-width:760px){nav .links a.sec{display:none}}
+  .hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+  .hero .glow{position:absolute;inset:-40% -20% auto auto;width:70%;height:600px;background:radial-gradient(closest-side,rgba(226,162,59,.22),transparent 70%);pointer-events:none}
+  .hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:74px 22px}
+  .hero h1{font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;letter-spacing:-.025em}
+  .hero p.lead{font-size:1.18rem;color:var(--mut);margin:1.1em 0 1.6em;max-width:34ch}
+  .hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .hero figure{margin:0;border-radius:16px;overflow:hidden;border:1px solid var(--line);box-shadow:0 30px 80px -30px #000}
+  .hero figure img{width:100%;display:block}
+  @media(max-width:780px){.hero .wrap{grid-template-columns:1fr;padding:48px 22px}}
+  section{padding:62px 0;border-bottom:1px solid var(--line)}
+  section h2{font-size:clamp(1.5rem,3.4vw,2.1rem);font-weight:800;letter-spacing:-.02em}
+  section .sub{color:var(--mut);margin:.6em 0 2em;max-width:62ch}
+  .grid{display:grid;gap:16px}
+  .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)} .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g3,.g4{grid-template-columns:1fr 1fr}}
+  @media(max-width:540px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px}
+  .card h3{font-size:1.05rem;margin-bottom:.4em}
+  .card p{color:var(--mut);font-size:.92rem;margin:0}
+  .num{display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center;border-radius:8px;background:rgba(226,162,59,.14);color:var(--amb);font-family:Sora;font-weight:800;font-size:.9rem;margin-bottom:.7em}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+  .flow span{background:var(--bg2);border:1px solid var(--line);border-radius:999px;padding:.45em .9em;font-size:.85rem;font-family:Sora;font-weight:600}
+  .flow .arr{color:var(--amb);border:none;background:none;padding:0 .1em}
+  pre{background:#0a0a0e;border:1px solid var(--line);border-radius:12px;padding:16px 18px;overflow:auto;font-size:.86rem;line-height:1.6;color:#d6d6e0}
+  pre .c{color:#6f6f7c} pre .k{color:var(--amb2)} pre .s{color:#9ece6a}
+  .step{display:grid;grid-template-columns:46px 1fr;gap:16px;margin-bottom:26px}
+  .step .b{width:46px;height:46px;border-radius:12px;background:var(--amb);color:#1a1206;font-family:Sora;font-weight:800;font-size:1.25rem;display:flex;align-items:center;justify-content:center}
+  .step h3{font-size:1.12rem;margin-bottom:.3em}
+  .step p{color:var(--mut);margin:.2em 0 .7em}
+  .ex{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:680px){.ex{grid-template-columns:1fr}}
+  .ex figure{margin:0;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+  .ex figure img{width:100%;display:block}
+  .ex figcaption{padding:12px 14px;font-size:.88rem;color:var(--mut);background:var(--card)}
+  .phase{display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+  .phase:last-child{border:none}
+  .phase .tag{flex:0 0 92px;font-family:Sora;font-weight:800;color:var(--amb)}
+  .phase .d strong{display:block;margin-bottom:.2em}
+  .phase .d span{color:var(--mut);font-size:.92rem}
+  footer{padding:46px 0;text-align:center;color:var(--mut);font-size:.9rem}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:.3em .8em;font-size:.78rem;color:var(--mut);margin:0 4px}
+</style>
+<link href="https://inematds.github.io/aiv2026/guia/" hreflang="pt-BR" rel="alternate"/><link href="https://inematds.github.io/aiv2026/guia/en/" hreflang="en" rel="alternate"/><link href="https://inematds.github.io/aiv2026/guia/es/" hreflang="es" rel="alternate"/></head>
+<body><div class="inema-lang" style="position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;gap:2px;padding:4px;border-radius:10px;background:rgba(12,12,16,.82);border:1px solid rgba(226,162,59,.45);font:600 12px/1 Sora,Inter,system-ui,sans-serif;backdrop-filter:blur(8px)" translate="no"><a href="../" hreflang="pt-BR" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">PT</a><a href="../en/" hreflang="en" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#e9e9ee">EN</a><a href="./" hreflang="es" style="padding:6px 8px;border-radius:7px;text-decoration:none;color:#1a1206;background:#E2A23B">ES</a></div>
+<nav><div class="wrap">
+<a class="brand" href="#top"><span class="emoji">📡</span> AIV 2026</a>
+<span class="sep">|</span>
+<span class="clubpro">
+<a class="inema" href="https://inema.club" rel="noopener" target="_blank">INEMA.CLUB</a>
+<span class="sep">-</span>
+<a class="pro" href="https://inema.pro" rel="noopener" target="_blank">PRO</a>
+</span>
+<div class="links">
+<a class="sec" href="#oque">Qué es</a>
+<a class="sec" href="#fluxo">Cómo funciona</a>
+<a class="sec" href="#guia">Guía de uso</a>
+<a class="sec" href="#exemplos">El caso</a>
+<a class="sec" href="#roadmap">Hoja de ruta</a>
+<button aria-label="Cambiar tema" class="tgl" id="themeToggle" title="Cambiar tema">🌙</button>
+<a class="btn" href="https://github.com/inematds/aiv2026" rel="noopener" target="_blank">GitHub</a>
+</div>
+</div></nav>
+<header class="hero" id="top">
+<div class="glow"></div>
+<div class="wrap">
+<div>
+<span class="chip">AEO · GEO · AI Visibility</span>
+<h1>Tu empresa <span class="amb">citada</span> por las IA</h1>
+<p class="lead">El método de 5 fases que hace que una empresa sea fácil de encontrar y recomendar por ChatGPT, Claude, Gemini y Perplexity, con el caso completo del cliente cero.</p>
+<div class="cta">
+<a class="btn" href="#guia">Comenzar la guía</a>
+<a class="btn ghost" href="https://github.com/inematds/aiv2026" rel="noopener" target="_blank">Ver en GitHub</a>
+</div>
+</div>
+<figure><pre style="margin:0;border:none;border-radius:0">
+<span class="c"># El camino crítico del método</span>
+
+<span class="k">F0</span> Diagnóstico   <span class="c">→ la referencia (baseline)</span>
+<span class="k">F1</span> Catálogo      <span class="c">→ el contenido (~50 fichas)</span>
+<span class="k">F2</span> Publicação    <span class="c">→ la exposición (AEO/GEO)</span>
+<span class="k">F3</span> Agente        <span class="c">→ la conversión (chat + leads)</span>
+<span class="k">F4</span> Loop          <span class="c">→ la evidencia (medir la diferencia)</span>
+
+<span class="c"># Ninguna fase se cierra «a ojo»:</span>
+<span class="c"># cada gate es un comando ejecutado.</span></pre></figure>
+</div>
+</header>
+<section id="oque"><div class="wrap">
+<span class="chip">Qué es</span>
+<h2>Un playbook replicable, con evidencia</h2>
+<p class="sub">La mayoría de las empresas simplemente no existe para las IA, y eso se puede medir antes y después. AIV 2026 reúne el método para revertirlo, junto con la ejecución completa y documentada en el cliente cero (INEMA).</p>
+<div class="grid g3">
+<div class="card"><h3>📕 Playbook de 5 fases</h3><p>Diagnóstico → catálogo → publicación → agente → ciclo. Cada fase con pasos, criterios de salida verificables, presupuesto y los obstáculos reales que ya se han vivido.</p></div>
+<div class="card"><h3>🧪 Caso real documentado</h3><p>El cliente cero partió de un 0% de apariciones en 52 mediciones con prompts neutros. El plan war-game, el registro de lo construido y el informe de decisiones: todo está en el repo.</p></div>
+<div class="card"><h3>🤖 Agente comercial en el sitio</h3><p>Chat que guía al visitante por el sitio, califica su interés y capta leads, con gates de seguridad comprobados (suite adversarial, rate limit, schema cerrado).</p></div>
+</div>
+</div></section>
+<section id="fluxo"><div class="wrap">
+<span class="chip">Cómo funciona</span>
+<h2>Las 5 fases del método</h2>
+<p class="sub">Reglas que se aplican a todas: nunca inventar datos del cliente (sin confirmación → PENDIENTE), medir antes de cambiar, probar localmente antes de publicar y no poner ningún agente en producción sin aprobación explícita.</p>
+<div class="flow">
+<span>F0 Diagnóstico</span><span class="arr">→</span>
+<span>F1 Catálogo</span><span class="arr">→</span>
+<span>F2 Publicación</span><span class="arr">→</span>
+<span>F3 Agente</span><span class="arr">→</span>
+<span>F4 Ciclo</span>
+</div>
+<div class="grid g3" style="margin-top:26px">
+<div class="card"><span class="num">F0</span><h3>Diagnóstico (2 días)</h3><p>~20 preguntas neutrales del sector, 3 ejecuciones en cada IA. Registra quién es citado, con qué fuentes y con qué errores. El baseline es el «antes» del caso.</p></div>
+<div class="card"><span class="num">F1</span><h3>Catálogo (1–2 semanas)</h3><p>~50 fichas Markdown+YAML versionadas: institucional, productos, FAQ derivadas del F0, portafolio. Extracción con fuente real, revisión del cliente en lotes de 10.</p></div>
+<div class="card"><span class="num">F2</span><h3>Publicación (1 semana)</h3><p>Generador estático → páginas con respuesta directa en el 1.º párrafo, JSON-LD y sitemap, alojadas en el dominio del cliente, con bots de IA habilitados y probados por user-agent.</p></div>
+<div class="card"><span class="num">F3</span><h3>Agente (2–3 semanas)</h3><p>Widget en shadow DOM + función serverless + LLM. Navegación y captura mediante tool use con schema cerrado; el catálogo como única fuente: el agente no inventa precios ni URL.</p></div>
+<div class="card"><span class="num">F4</span><h3>Ciclo (continuo)</h3><p>Nueva medición mensual del AI Share of Voice frente al baseline + ciclo semanal sobre las conversaciones reales. Las preguntas sin ficha se convierten en fichas nuevas.</p></div>
+<div class="card"><span class="num">⚙</span><h3>War game integrado</h3><p>El plan supone que surgirán obstáculos: cada fase declara una suposición optimista y otra pesimista, modos de falla con correcciones predefinidas y un presupuesto para los intentos.</p></div>
+</div>
+</div></section>
+<section id="pre"><div class="wrap">
+<span class="chip">Requisitos previos</span>
+<h2>Qué debe existir antes de empezar</h2>
+<p class="sub">El método es económico de ejecutar: la infraestructura de publicación es estática y gratuita; el agente usa un LLM de bajo costo detrás de una función serverless.</p>
+<div class="grid g3">
+<div class="card"><h3>🧑‍💻 De quien ejecuta</h3><p>Clona el repo y lee el playbook de principio a fin antes de hacer cualquier cosa.</p><pre><span class="c"># punto de partida</span>
+<span class="k">git clone</span> <span class="s">https://github.com/inematds/aiv2026</span>
+<span class="k">cat</span> aiv2026/playbook-aeo-geo.md</pre></div>
+<div class="card"><h3>🏢 Del cliente</h3><p>Acceso al dominio/sitio (para el proxy y el robots.txt), 1–2 h/semana de revisión durante el catálogo y una persona responsable disponible para aprobar las transcripciones del agente.</p></div>
+<div class="card"><h3>🧱 De infraestructura</h3><p>Alojamiento estático (GitHub Pages basta), un Postgres serverless (Supabase) para el agente y una clave de LLM —por defecto, mediante OpenRouter— que nunca toca el navegador.</p></div>
+</div>
+</div></section>
+<section id="guia"><div class="wrap">
+<span class="chip">Guía de uso · paso a paso</span>
+<h2>De cero al cliente citado por IA</h2>
+<p class="sub">El resumen ejecutable del playbook: de cero a la operación continua. Los detalles, los modos de falla y los criterios completos están en los documentos del repo (el README incluye este mismo paso a paso ampliado).</p>
+<div class="step"><div class="b">1</div><div>
+<h3>Empieza desde cero: genera tu plan war-game</h3>
+<p>Clona el repo, lee el playbook de principio a fin y usa el prompt original con los [placeholders] reemplazados por el proyecto del nuevo cliente. Planifica las barreras antes de escribir una sola línea de código.</p>
+<pre><span class="k">git clone</span> <span class="s">https://github.com/inematds/aiv2026</span>
+<span class="k">cat</span> aiv2026/playbook-aeo-geo.md              <span class="c"># el método</span>
+<span class="k">cat</span> aiv2026/case-inema/prompt-war-game-portugues.md  <span class="c"># genera tu plan con él</span></pre>
+</div></div>
+<div class="step"><div class="b">2</div><div>
+<h3>Mide la línea de base (F0)</h3>
+<p>Recopila ~20 preguntas neutras del nicho junto con el cliente, congela la batería como v1 y ejecuta cada prompt 3× en cada IA. Sin línea de base, ningún resultado posterior se puede demostrar.</p>
+<pre><span class="c"># registrar en CSV: fecha, herramienta, prompt, ejecución,</span>
+<span class="c"># ¿se cita al cliente?, competidores, fuentes citadas, errores de la IA</span>
+<span class="k">resultado do cliente-zero:</span> 0% de aparição em 52 medições</pre>
+</div></div>
+<div class="step"><div class="b">3</div><div>
+<h3>Escribe el catálogo (F1)</h3>
+<p>Fichas Markdown+YAML en lotes de 10, siempre con una fuente real. La FAQ nace de la propia batería F0: preguntas con demanda comprobada, no inventadas.</p>
+<pre><span class="c"># front matter obligatorio por ficha</span>
+slug, tipo, titulo, resumo, status, <span class="k">fonte</span>, <span class="k">confianca</span>, atualizado_em
+<span class="c"># regla estricta: sin confirmación → confianca: PENDENTE</span>
+<span class="c"># el validador rechaza publicar una ficha PENDENTE</span></pre>
+</div></div>
+<div class="step"><div class="b">4</div><div>
+<h3>Publica para las IA (F2)</h3>
+<p>Genera páginas estáticas con respuesta directa en el 1.º párrafo, JSON-LD y canonical en el dominio del cliente. Habilita los bots de IA en robots.txt y compruébalo con curl.</p>
+<pre><span class="c"># el gate no es una opinión, es un comando:</span>
+<span class="k">curl</span> -A <span class="s">"OAI-SearchBot"</span> https://dominio-do-cliente/conhecimento/  <span class="c"># 200</span>
+<span class="k">curl</span> -A <span class="s">"ClaudeBot"</span>     https://dominio-do-cliente/conhecimento/  <span class="c"># 200</span>
+<span class="c"># + JSON-LD validado + sitemap enviado a Google Search Console</span>
+<span class="c">#   y en Bing Webmaster Tools (configuración única; después vuelven a rastrear por sí solos)</span></pre>
+</div></div>
+<div class="step"><div class="b">5</div><div>
+<h3>Instala el agente (F3)</h3>
+<p>Widget ligero en el sitio, función serverless en el medio, catálogo como única fuente de verdad. La navegación y la captura de leads son tools con schema cerrado: el modelo no puede inventar URL. El cerebro llama al <strong>OpenRouter</strong> por defecto: un endpoint con formato de OpenAI para cientos de modelos; cambiar de modelo es cambiar una cadena, y el costo por conversación aparece listo en el dashboard.</p>
+<pre><span class="c"># gates antes del go-live (ninguno es opcional)</span>
+suíte adversarial ≥20 ataques  <span class="c"># 0 filtraciones, 0 acciones fuera del schema</span>
+flood de requisições           <span class="c"># rate limit devuelve 429</span>
+lead de teste                  <span class="c"># confirmado con una query en la base de datos</span>
+10 transcrições                <span class="c"># aprobadas por el cliente</span></pre>
+</div></div>
+<div class="step"><div class="b">6</div><div>
+<h3>Activa el ciclo y demuestra el delta (F4)</h3>
+<p>Instala las 4 señales de medición (sitio, páginas de conocimiento, agente, share of voice) y vuelve a ejecutar la batería v1 cada mes. El delta respecto a la línea de base es la cifra del caso.</p>
+<pre><span class="c"># ¿share of voice estancado después de 3 meses?</span>
+<span class="c"># la palanca deja de ser el contenido y pasa a ser la autoridad</span>
+<span class="c"># externa: las fuentes que las IA citan en lugar del cliente</span>
+<span class="k">re-medição mensal</span> → delta vs baseline → relatório de 10 linhas</pre>
+</div></div>
+<div class="step"><div class="b">7</div><div>
+<h3>Mantén al día las tres superficies (operación continua)</h3>
+<p>Cada cambio de contenido pasa por tres destinos: el sitio público, la base de datos del agente y los buscadores. Olvidar cualquiera deja una superficie desactualizada: el agente responde desde la base de datos, no desde los archivos.</p>
+<pre><span class="c"># edita la ficha en catalogo/ (sin confirmación → PENDENTE), después:</span>
+<span class="k">node</span> scripts/gerar-site.mjs               <span class="c"># 1. sitio: HTML+JSON-LD+sitemap → push</span>
+<span class="k">node</span> scripts/sync-catalogo-supabase.mjs   <span class="c"># 2. base de datos del agente (catalogo_fichas)</span>
+<span class="c"># 3. buscadores: el sitemap sale con lastmod nuevo y Google/Bing</span>
+<span class="c">#    vuelven a rastrear por sí solos; si cambió una página estratégica → solicitar</span>
+<span class="c">#    reindexación manual en Search Console (Inspección de URL)</span></pre>
+</div></div>
+</div></section>
+<section id="exemplos"><div class="wrap">
+<span class="chip">El caso</span>
+<h2>El cliente cero en cifras</h2>
+<p class="sub">Todo verificado con comandos reales y documentado en el repo: el plan war-game original, el registro de lo que se construyó (con runbook) y el informe de decisiones y riesgos.</p>
+<div class="grid g4">
+<div class="card"><h3 class="amb">0%</h3><p>de apariciones en las 52 mediciones del baseline: la evidencia del problema y el «antes» del caso.</p></div>
+<div class="card"><h3 class="amb">54 fichas</h3><p>del catálogo se convirtieron en páginas públicas indexables, con JSON-LD, sitemap y bots de IA probados uno por uno.</p></div>
+<div class="card"><h3 class="amb">22 ataques</h3><p>en la suite adversarial contra el agente publicado: 0 filtraciones de instrucciones, 0 acciones fuera del schema.</p></div>
+<div class="card"><h3 class="amb">4 señales</h3><p>de medición instalados para el ciclo: sitio, páginas de conocimiento, conversaciones del agente y AI Share of Voice mensual.</p></div>
+</div>
+<div class="grid g3" style="margin-top:18px">
+<div class="card"><h3>📋 prompt-war-game-portugues.md</h3><p>El prompt original que generó el plan, reutilizable: reemplaza los [placeholders] por el proyecto del nuevo cliente.</p></div>
+<div class="card"><h3>🗺️ case-inema/plano-aiv.md</h3><p>El plan war-game completo, con las tablas de 22 escenarios de falla que se pueden transferir casi íntegramente a cualquier cliente.</p></div>
+<div class="card"><h3>🧾 case-inema/o-que-foi-feito-aiv.md</h3><p>Lo que ya está construido + el runbook operativo: cómo regenerar el sitio, sincronizar el catálogo y volver a medir la batería.</p></div>
+</div>
+</div></section>
+<section id="roadmap"><div class="wrap">
+<span class="chip">Hoja de ruta</span>
+<h2>En qué etapa está el programa</h2>
+<p class="sub">El cliente cero ejecutó las 5 fases en 2026-07; la ventana de indexación y la medición mensual están en curso.</p>
+<div class="phase"><div class="tag">Hecho</div><div class="d"><strong>Método ejecutado de principio a fin con el cliente cero</strong><span>Baseline medido, 54 fichas publicadas, agente construido y probado, 4 señales de medición en funcionamiento.</span></div></div>
+<div class="phase"><div class="tag">Ahora</div><div class="d"><strong>Ventana de indexación + primeras nuevas mediciones</strong><span>Search Console/Bing procesando el sitemap (2–6 semanas); batería v1 medida de nuevo mensualmente para calcular la diferencia.</span></div></div>
+<div class="phase"><div class="tag">Siguiente</div><div class="d"><strong>Caso cerrado con delta + oferta del servicio</strong><span>Cuando se mueva el share of voice, el caso se convierte en material comercial y el playbook, en una propuesta para nuevos clientes.</span></div></div>
+</div></section>
+<footer>
+<div class="wrap">
+<div class="pill">Markdown + YAML</div><div class="pill">HTML estático + JSON-LD</div><div class="pill">Serverless + LLM</div>
+<p style="margin-top:18px">AIV 2026 · AI Visibility como servicio ·
+      <a href="https://github.com/inematds/aiv2026">inematds/aiv2026</a> ·
+      <a href="https://inema.club">INEMA.CLUB</a></p>
+</div>
+</footer>
+<script>
+  (function(){
+    var KEY='aiv2026-theme';
+    var b=document.body, t=document.getElementById('themeToggle');
+    if(localStorage.getItem(KEY)==='light'){ b.classList.add('light'); t.textContent='☀️'; }
+    t.addEventListener('click',function(){
+      var light=b.classList.toggle('light');
+      t.textContent=light?'☀️':'🌙';
+      localStorage.setItem(KEY, light?'light':'dark');
+    });
+  })();
+</script>
+</body>
+</html>
